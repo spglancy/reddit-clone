@@ -15,4 +15,14 @@ postRoutes.post('/posts/new', (req, res) => {
     res.redirect('/')
 })
 
+postRoutes.get("/posts/:id", (req, res) => {
+    Post.findById(req.params.id)
+        .then(post => {
+            res.render("post-view", { post });
+        })
+        .catch(err => {
+            console.log(err.message);
+        });
+});
+
 module.exports = postRoutes
