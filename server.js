@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config();
 const express = require('express')
 const app = express()
 const exphbs = require('express-handlebars')
@@ -7,6 +8,21 @@ const bodyParser = require('body-parser')
 const config = require('./config')
 const postController = require('./controllers/postController')
 const commentController = require('./controllers/commentController')
+const authController = require('./controllers/authController')
+
+// var checkAuth = (req, res, next) => {
+//     console.log("Checking authentication");
+//     if (typeof req.cookies.nToken === "undefined" || req.cookies.nToken === null) {
+//       req.user = null;
+//     } else {
+//       var token = req.cookies.nToken;
+//       var decodedToken = jwt.decode(token, { complete: true }) || {};
+//       req.user = decodedToken.payload;
+//     }
+  
+//     next();
+// };
+// app.use(checkAuth);
 
 mongoose.connect(config.mongoURL, { useNewUrlParser: true })
     .catch(err => {
@@ -21,11 +37,7 @@ app.use(methodOverride('_method'))
 app.use(express.static(__dirname + '/public'))
 app.use('/', postController)
 app.use('/', commentController)
-
-
-app.get('/', (req, res) => {
-    res.render('home');
-})
+app.use('/auth', authController)
 
 app.listen(config.port, () => {
     console.log(`App running on port ${config.port}`)
