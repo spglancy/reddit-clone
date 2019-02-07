@@ -31,14 +31,11 @@ router.post('/posts/new', (req, res) => {
 
 router.get("/posts/:id", (req, res) => {
     console.log(req.params)
-    Post.findById(req.params.id)
-        .then(post => {
-            console.log(post)
-            res.render("post-view", { post });
-        })
-        .catch(err => {
-            console.log(err.message);
-        });
+    Post.findById(req.params.id).populate('comments').then((post) => {
+        res.render('post-view', { post })
+      }).catch((err) => {
+        console.log(err.message)
+      })
 });
 
 module.exports = router
