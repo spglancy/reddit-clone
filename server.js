@@ -13,22 +13,18 @@ mongoose.connect(config.mongoURL, { useNewUrlParser: true })
         throw err
     })
 
-app.use(express.static(__dirname + '/public'))
+
 app.set('view engine', 'handlebars')
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressValidator())
 app.use(methodOverride('_method'))
-
+app.use(express.static(__dirname + '/public'))
 app.use('/', postController)
 
 app.get('/', (req, res) => {
     res.render('home');
-})
-
-app.get('/post-new', (req, res) => {
-    res.render('new-post')
 })
 
 app.listen(config.port, () => {

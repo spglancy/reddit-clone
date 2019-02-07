@@ -1,8 +1,8 @@
 const express = require('express')
-const postRoutes = express.Router()
+const router = express.Router()
 const Post = require('../models/post')
 
-postRoutes.get('/', (req, res) => {
+router.get('/', (req, res) => {
     Post.find({}).then(posts => {
         res.render("home", { posts });
     }).catch(err => {
@@ -10,14 +10,30 @@ postRoutes.get('/', (req, res) => {
     });
 })
 
-postRoutes.post('/posts/new', (req, res) => {
+router.get("/n/:subreddit", function(req, res) {
+    Post.find({ subreddit: req.params.subreddit })
+      .then(posts => {
+        res.render("home", { posts });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
+router.get('/post-new', (req, res) => {
+    res.render('new-post')
+})
+
+router.post('/posts/new', (req, res) => {
     Post.create(req.body);
     res.redirect('/')
 })
 
-postRoutes.get("/posts/:id", (req, res) => {
+router.get("/posts/:id", (req, res) => {
+    console.log(req.params)
     Post.findById(req.params.id)
         .then(post => {
+            console.log(post)
             res.render("post-view", { post });
         })
         .catch(err => {
@@ -25,4 +41,4 @@ postRoutes.get("/posts/:id", (req, res) => {
         });
 });
 
-module.exports = postRoutes
+module.exports = router
