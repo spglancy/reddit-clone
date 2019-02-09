@@ -10,19 +10,19 @@ const postController = require('./controllers/postController')
 const commentController = require('./controllers/commentController')
 const authController = require('./controllers/authController')
 
-// var checkAuth = (req, res, next) => {
-//     console.log("Checking authentication");
-//     if (typeof req.cookies.nToken === "undefined" || req.cookies.nToken === null) {
-//       req.user = null;
-//     } else {
-//       var token = req.cookies.nToken;
-//       var decodedToken = jwt.decode(token, { complete: true }) || {};
-//       req.user = decodedToken.payload;
-//     }
+var checkAuth = (req, res, next) => {
+    console.log("Checking authentication");
+    if (typeof req.cookies.nToken === "undefined" || req.cookies.nToken === null) {
+      req.user = null;
+    } else {
+      var token = req.cookies.nToken;
+      var decodedToken = jwt.decode(token, { complete: true }) || {};
+      req.user = decodedToken.payload;
+    }
   
-//     next();
-// };
-// app.use(checkAuth);
+    next();
+};
+app.use(checkAuth);
 
 mongoose.connect(config.mongoURL, { useNewUrlParser: true })
     .catch(err => {
