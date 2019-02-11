@@ -8,5 +8,5 @@
     </div>
   </form>
 {{#each post.comments}}
-<p>{{this.content}}</p>
+  {{> comment comment=this postId=../post._id}}
 {{/each}}
