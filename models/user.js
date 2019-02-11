@@ -6,7 +6,9 @@ const UserSchema = new Schema({
   createdAt: { type: Date },
   updatedAt: { type: Date },
   password: { type: String, required: true, unique: true },
-  username: { type: String, required: true }
+  username: { type: String, required: true },
+  posts : [{ type: Schema.Types.ObjectId, ref: "Post" }],
+  comments : [{ type: Schema.Types.ObjectId, ref: "Comment" }]
 });
 
 // Must use function here! ES6 => functions do not bind this!

@@ -31,6 +31,7 @@ router.get('/login', (req, res) => {
 router.post('/register', (req, res) => {
   var user = new User(req.body);
   user.save().then((user) => {
+    console.log("user creation successful")
       var token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: "60 days" });
       res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
       res.redirect(`/`);
@@ -62,6 +63,7 @@ router.post("/login", (req, res) => {
         const token = jwt.sign({ _id: user._id, email: user.email, name: user.name }, process.env.SECRET, {
           expiresIn: "60 days"
         });
+        console.log("login success")
         // Set a cookie and redirect to root
         res.cookie("nToken", token, { maxAge: 900000, httpOnly: true });
         res.redirect(`/`);

@@ -9,20 +9,8 @@ const config = require('./config')
 const postController = require('./controllers/postController')
 const commentController = require('./controllers/commentController')
 const authController = require('./controllers/authController')
-
-var checkAuth = (req, res, next) => {
-    console.log("Checking authentication");
-    if (typeof req.cookies.nToken === "undefined" || req.cookies.nToken === null) {
-      req.user = null;
-    } else {
-      var token = req.cookies.nToken;
-      var decodedToken = jwt.decode(token, { complete: true }) || {};
-      req.user = decodedToken.payload;
-    }
-  
-    next();
-};
-app.use(checkAuth);
+var cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
 
 mongoose.connect(config.mongoURL, { useNewUrlParser: true })
     .catch(err => {
@@ -35,9 +23,22 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(express.static(__dirname + '/public'))
+app.use(cookieParser());
+var checkAuth = (req, res, next) => {
+    console.log("Checking authentication");
+    if (typeof req.cookies.nToken === "undefined" || req.cookies.nToken === null) {
+      req.user = null;
+    } else {
+      var token = req.cookies.nToken;
+      var decodedToken = jwt.decode(token, { complete: true }) || {};
+      req.user = decodedToken.payload;
+    }
+    next();
+  };
+  app.use(checkAuth);
 app.use('/', postController)
 app.use('/', commentController)
-app.use('/auth', authController)
+app.use('/', authController)
 
 app.listen(config.port, () => {
     console.log(`App running on port ${config.port}`)
