@@ -4,15 +4,36 @@ const Post = require('../models/post')
 const User = require('../models/user');
 
 router.get('/', (req, res) => {
-    var currentUser = req.user;
-    console.log(req.cookies);
+    let currentUser = req.user
     Post.find().populate('author')
     .then(posts => {
-        res.render('home', { posts, currentUser });
+        res.render('home', { 
+            post: posts, 
+            user: currentUser });
     }).catch(err => {
         console.log(err.message);
     })
 })
+
+router.put("/posts/:id/vote-up", function(req, res) {
+    Post.findById(req.params.id).exec(function(err, post) {
+      post.upVotes.push(req.user._id);
+      post.voteScore = post.voteScore + 1;
+      post.save();
+  
+      res.status(200);
+    });
+  });
+
+  router.put("/posts/:id/vote-down", function(req, res) {
+    Post.findById(req.params.id).exec(function(err, post) {
+      post.downVotes.push(req.user._id);
+      post.voteScore = post.voteScore - 1;
+      post.save();
+  
+      res.status(200);
+    });
+  });
 
 router.get("/n/:subreddit", function(req, res) {
     const currentUser = req.user;
@@ -31,8 +52,11 @@ router.get('/post-new', (req, res) => {
 
 router.post('/posts/new', (req, res) => {
     if (req.user) {
-        const post = new Post(req.body);
+        let post = new Post(req.body);
         post.author = req.user._id;
+        post.upVotes = [];
+        post.downVotes = [];
+        post.voteScore = 0;
 
         post.save()
             .then(post => {

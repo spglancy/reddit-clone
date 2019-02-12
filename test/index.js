@@ -13,8 +13,7 @@ describe("site", function() {
   it("Should have home page", function(done) {
     // Describe what should happen
     // In this case we test that the home page loads
-    chai
-      .request(app)
+    agent
       .get("/")
       .end(function(err, res) {
         if (err) {
@@ -27,7 +26,6 @@ describe("site", function() {
 });
 
 describe('Posts', function() {
-    const agent = chai.request.agent(app);
     // Post that we'll use for testing purposes
     const newPost = {
         title: 'post title',
@@ -54,8 +52,7 @@ describe('Posts', function() {
         // Checks how many posts there are now
         Post.estimatedDocumentCount()
           .then(function (initialDocCount) {
-              chai
-                  .request(app)
+              agent
                   .post("/posts/new")
                   // This line fakes a form post,
                   // since we're not actually filling out a form

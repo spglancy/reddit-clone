@@ -32,6 +32,7 @@ var checkAuth = (req, res, next) => {
       var token = req.cookies.nToken;
       var decodedToken = jwt.decode(token, { complete: true }) || {};
       req.user = decodedToken.payload;
+      console.log("Auth success")
     }
     next();
   };
