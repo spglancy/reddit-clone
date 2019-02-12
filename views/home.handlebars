@@ -1,6 +1,6 @@
 {{#each post}}
 <li class="list-group-item">
-  <div class="lead">{{this.title}}</div>
+  <a class="lead" href="/posts/{{this._id}}">{{this.title}}</div>
   <a href="{{this.url}}" target="_blank">{{this.url}}<a>
   <div><small>{{this.author.username}}</small></div>
   <div class="text-right">
