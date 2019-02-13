@@ -39,7 +39,7 @@ router.post("/posts/:postId/comments", function(req, res) {
         return Comment.findById(req.params.commentId);
       })
       .then(comment => {
-        res.render("replies-new", { post, comment });
+        res.render("replies-new", { post, comment, user: req.user });
       })
       .catch(err => {
         console.log(err.message);

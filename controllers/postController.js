@@ -76,10 +76,9 @@ router.post('/posts/new', (req, res) => {
 })
 
 router.get("/posts/:id", (req, res) => {
-    console.log(req.params)
     Post.findById(req.params.id).populate('comments').lean()
     .then((post) => {
-        res.render('post-view', { post })
+        res.render('post-view', { post, user: req.user })
       }).catch((err) => {
         console.log(err.message)
       })
