@@ -36,10 +36,9 @@ router.put("/posts/:id/vote-up", function(req, res) {
   });
 
 router.get("/n/:subreddit", function(req, res) {
-    const currentUser = req.user;
     Post.find({ subreddit: req.params.subreddit }).populate('author').lean()
         .then(posts => {
-            res.render("home", { posts, currentUser });
+            res.render("home", { posts, currentUser: req.user });
         })
         .catch(err => {
             console.log(err);
@@ -66,13 +65,13 @@ router.post('/posts/new', (req, res) => {
                 user.posts.unshift(post);
                 user.save();
                 // REDIRECT TO THE NEW POST
-                res.redirect(`/posts/${post._id}`);
+                return res.redirect(`/posts/${post._id}`);
             })
             .catch(err => {
                 console.log(err.message);
             });
     } else {
-        return res.status(401); // UNAUTHORIZED
+        return res.status(401) // UNAUTHORIZED
     }
 })
 

@@ -19,7 +19,7 @@ describe("User", function() {
       it("should be able to signup", function(done) {
         User.findOneAndRemove({ username: "testone" }, function() {
           agent
-            .post("/sign-up")
+            .post("/register")
             .send({ username: "testone", password: "password" })
             .end(function(err, res) {
               console.log(res.body);

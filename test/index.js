@@ -3,6 +3,7 @@ const chai = require("chai");
 const chaiHttp = require("chai-http");
 const should = chai.should();
 const agent = chai.request.agent(app);
+const expect = chai.expect
 
 chai.use(chaiHttp);
 const Post = require('../models/post');
@@ -31,6 +32,7 @@ describe('Posts', function() {
         title: 'post title',
         url: 'https://www.google.com',
         summary: 'post summary',
+        subreddit: 'blah'
     };
     const user = {
         username: 'poststest',
@@ -38,7 +40,7 @@ describe('Posts', function() {
     };
     before(function (done) {
         agent
-          .post('/sign-up')
+          .post('/register')
           .set("content-type", "application/x-www-form-urlencoded")
           .send(user)
           .then(function (res) {
@@ -62,6 +64,7 @@ describe('Posts', function() {
                   .then(function (res) {
                       Post.estimatedDocumentCount()
                           .then(function (newDocCount) {
+                              console.log("in final func")
                               // Check that the database has one more post in it
                               expect(res).to.have.status(200);
                               // Check that the database has one more post in it

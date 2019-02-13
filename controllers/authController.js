@@ -32,8 +32,8 @@ router.post('/register', (req, res) => {
   var user = new User(req.body);
   user.save().then((user) => {
     console.log("user creation successful")
-      let token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: "60 days" });
-      res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
+      let token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: "10 days" });
+      res.cookie('nToken', token, { maxAge: 90000000, httpOnly: true });
       res.redirect(`/`);
   });
   });
@@ -44,10 +44,10 @@ router.get('/logout', (req, res) => {
     });
 
 router.post("/login", (req, res) => {
-  const email = req.body.email;
+  const username = req.body.username;
   const password = req.body.password;
   // Find this user name
-  User.findOne({ email }, "email password")
+  User.findOne({ username }, "username password")
     .then(user => {
       if (!user) {
         // User not found
@@ -60,12 +60,12 @@ router.post("/login", (req, res) => {
           return res.status(401).send({ message: "Wrong Email or Password" });
         }
         // Create a token
-        const token = jwt.sign({ _id: user._id, email: user.email, name: user.name }, process.env.SECRET, {
-          expiresIn: "60 days"
+        const token = jwt.sign({ _id: user._id, username: user.username, name: user.name }, process.env.SECRET, {
+          expiresIn: "10 days"
         });
         console.log("login success")
         // Set a cookie and redirect to root
-        res.cookie("nToken", token, { maxAge: 900000, httpOnly: true });
+        res.cookie("nToken", token, { maxAge: 90000000, httpOnly: true });
         res.redirect(`/`);
       });
     })

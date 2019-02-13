@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(express.static(__dirname + '/public'))
 app.use(cookieParser());
-var checkAuth = (req, res, next) => {
+const checkAuth = (req, res, next) => {
     console.log("Checking authentication");
     if (typeof req.cookies.nToken === "undefined" || req.cookies.nToken === null) {
       req.user = null;
@@ -44,3 +44,4 @@ app.use('/', authController)
 app.listen(config.port, () => {
     console.log(`App running on port ${config.port}`)
 })
+module.exports = app
